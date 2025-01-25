@@ -1,0 +1,8 @@
+---
+version: 1.2.5
+title: Scanner: two_squiggles
+---
+Ok([
+  HclToken(OperatorOrDelimeter, "{", 0),
+  HclToken(OperatorOrDelimeter, "}", 1),
+])

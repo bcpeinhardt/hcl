@@ -1,0 +1,11 @@
+---
+version: 1.2.5
+title: Scanner: math
+---
+Ok([
+  HclToken(OperatorOrDelimeter, "+", 0),
+  HclToken(OperatorOrDelimeter, "-", 2),
+  HclToken(OperatorOrDelimeter, "*", 4),
+  HclToken(OperatorOrDelimeter, "/", 6),
+  HclToken(OperatorOrDelimeter, "%", 8),
+])

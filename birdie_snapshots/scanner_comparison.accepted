@@ -1,0 +1,21 @@
+---
+version: 1.2.5
+title: Scanner: comparison
+---
+Ok([
+  HclToken(OperatorOrDelimeter, "!=", 0),
+  HclToken(OperatorOrDelimeter, "<", 3),
+  HclToken(OperatorOrDelimeter, "<=", 5),
+  HclToken(OperatorOrDelimeter, ">", 8),
+  HclToken(
+    OperatorOrDelimeter,
+    ">=",
+    10,
+  ),
+  HclToken(OperatorOrDelimeter, "=", 13),
+  HclToken(
+    OperatorOrDelimeter,
+    "==",
+    15,
+  ),
+])

@@ -1,0 +1,26 @@
+---
+version: 1.2.5
+title: Scanner: other_punctuation
+---
+Ok([
+  HclToken(OperatorOrDelimeter, ":", 0),
+  HclToken(OperatorOrDelimeter, "?", 2),
+  HclToken(OperatorOrDelimeter, "=>", 4),
+  HclToken(OperatorOrDelimeter, ".", 7),
+  HclToken(OperatorOrDelimeter, ",", 9),
+  HclToken(
+    OperatorOrDelimeter,
+    "...",
+    11,
+  ),
+  HclToken(
+    OperatorOrDelimeter,
+    "${",
+    15,
+  ),
+  HclToken(
+    OperatorOrDelimeter,
+    "%{",
+    18,
+  ),
+])

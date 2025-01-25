@@ -1,0 +1,12 @@
+---
+version: 1.2.5
+title: Scanner: braces
+---
+Ok([
+  HclToken(OperatorOrDelimeter, "{", 0),
+  HclToken(OperatorOrDelimeter, "}", 1),
+  HclToken(OperatorOrDelimeter, "[", 3),
+  HclToken(OperatorOrDelimeter, "]", 4),
+  HclToken(OperatorOrDelimeter, "(", 6),
+  HclToken(OperatorOrDelimeter, ")", 7),
+])
