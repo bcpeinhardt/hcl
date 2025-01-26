@@ -38,3 +38,7 @@ pub fn ident_test() {
 pub fn byte_offset_of_ident_test() {
   test_scan("byte offset of identifier", "Foo + Bar")
 }
+
+pub fn line_comment_test() {
+  test_scan("line comment with //", "// I am a comment\nFoo")
+}

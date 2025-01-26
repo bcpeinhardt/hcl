@@ -5,6 +5,7 @@ import gleam/bool
 import gleam/io
 import gleam/list
 import gleam/result
+import gleam/set
 import gleam/string
 
 // Let's start with a scanner.
@@ -77,6 +78,7 @@ pub fn scan(src: String) -> Result(List(HclToken), Nil) {
 }
 
 fn do_scan(scanner: Scanner, acc: List(HclToken)) -> Result(List(HclToken), Nil) {
+  // Helper function for the common case of an operator.
   let op = fn(new_src, lexeme) {
     do_scan(advance(scanner, by: string.length(lexeme), new_src:), [
       token(scanner, OperatorOrDelimeter, lexeme),
@@ -89,6 +91,28 @@ fn do_scan(scanner: Scanner, acc: List(HclToken)) -> Result(List(HclToken), Nil)
 
     // Whitespace is ignored
     " " <> rest -> do_scan(scanner |> advance(by: 1, new_src: rest), acc)
+
+    // Line Commnets
+    "//" <> rest | "#" <> rest -> {
+      case string.split_once(rest, "\n") {
+        // A line ending never occurs after `//`.
+        // This means we've reached the end of the program
+        Error(_) -> Ok([token(scanner, LineComment, rest), ..acc])
+
+        // The much more likely case of the comment ending with a newline
+        Ok(#(comment, rest)) -> {
+          let comment = case string.ends_with(comment, "\r") {
+            False -> comment
+            True -> string.drop_end(comment, 1)
+          }
+          let comment = token(scanner, LineComment, comment)
+          let scanner = scanner |> advance(by: string.length(comment.lexeme) + 2, new_src: rest)
+          let newline = token(scanner, Newline, "\n")
+          let scanner = scanner |> advance(by: 1, new_src: rest)
+          do_scan(scanner, [newline, comment, ..acc])
+        }
+      }
+    }
 
     "{" <> rest -> op(rest, "{")
     "}" <> rest -> op(rest, "}")
@@ -152,8 +176,6 @@ fn do_scan(scanner: Scanner, acc: List(HclToken)) -> Result(List(HclToken), Nil)
   }
 }
 
-import gleam/set
-
 fn parse_ident(src: String) -> Result(#(String, String), Nil) {
   use first <- result.try(string.first(src))
   use <- bool.guard(!is_alpha(first), Error(Nil))
@@ -161,7 +183,6 @@ fn parse_ident(src: String) -> Result(#(String, String), Nil) {
     string.drop_start(src, 1)
     |> string.to_graphemes
     |> list.split_while(fn(s) {
-
       // TODO: This is a temporary definition of identifiers as consisting of letters, numbers,
       // underscores, and dashes, but this does not match the true spec for identifiers in terraform.
       is_alpha(s) || is_digit(s) || s == "_" || s == "-"
@@ -184,6 +205,4 @@ fn is_digit(txt: String) -> Bool {
   let txt_set = set.from_list(string.to_graphemes(txt))
   set.union(digits_set, txt_set) == digits_set
 }
-
-
 // --------------------- End Scanner ----------------------------------------------------------
