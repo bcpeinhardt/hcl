@@ -1,0 +1,15 @@
+---
+version: 1.2.5
+title: Scanner: inline comment
+---
+Ok([
+  HclToken(
+    InlineComment,
+    " I am an inline 
+ {} comment ",
+    0,
+  ),
+  HclToken(Identifier, "Foo", 34),
+  HclToken(OperatorOrDelimeter, "=", 38),
+  HclToken(Identifier, "Bar", 40),
+])

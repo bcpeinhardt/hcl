@@ -40,5 +40,13 @@ pub fn byte_offset_of_ident_test() {
 }
 
 pub fn line_comment_test() {
-  test_scan("line comment with //", "// I am a comment\nFoo")
+  test_scan("line comment with double slash", "// I am a comment\nFoo")
+}
+
+pub fn line_comment_octothorp_test() {
+  test_scan("line comment with an octothorpe", "#I am a comment")
+}
+
+pub fn inline_comment_test() {
+  test_scan("inline comment", "/* I am an inline \n {} comment */\nFoo = Bar")
 }

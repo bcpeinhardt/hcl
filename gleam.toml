@@ -14,8 +14,8 @@ version = "1.0.0"
 
 [dependencies]
 gleam_stdlib = ">= 0.44.0 and < 2.0.0"
-birdie = ">= 1.2.5 and < 2.0.0"
-pprint = ">= 1.0.4 and < 2.0.0"
 
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
+birdie = ">= 1.2.5 and < 2.0.0"
+pprint = ">= 1.0.4 and < 2.0.0"

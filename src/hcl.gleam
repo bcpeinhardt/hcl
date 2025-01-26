@@ -61,6 +61,12 @@ fn new_scanner(src: String) -> Scanner {
   Scanner(src:, byte_offset: 0)
 }
 
+fn take_until(scanner: Scanner, ends_with delimeter: String) -> Result(#(String, Scanner), Nil) {
+  use #(lexeme, rest) <- result.try(string.split_once(scanner.src, delimeter))
+  let scanner = Scanner(byte_offset: string.byte_size(lexeme) + string.byte_size(delimeter), src: rest)
+  Ok(#(lexeme, scanner))
+} 
+
 /// Increment the byte offset.
 fn advance(scanner: Scanner, by offset: Int, new_src src: String) -> Scanner {
   Scanner(byte_offset: scanner.byte_offset + offset, src:)
@@ -90,10 +96,11 @@ fn do_scan(scanner: Scanner, acc: List(HclToken)) -> Result(List(HclToken), Nil)
     "" -> Ok(acc)
 
     // Whitespace is ignored
-    " " <> rest -> do_scan(scanner |> advance(by: 1, new_src: rest), acc)
+    " " <> rest | "\n" <> rest | "\r\n" <> rest -> do_scan(scanner |> advance(by: 1, new_src: rest), acc)
 
     // Line Commnets
     "//" <> rest | "#" <> rest -> {
+
       case string.split_once(rest, "\n") {
         // A line ending never occurs after `//`.
         // This means we've reached the end of the program
@@ -110,6 +117,20 @@ fn do_scan(scanner: Scanner, acc: List(HclToken)) -> Result(List(HclToken), Nil)
           let newline = token(scanner, Newline, "\n")
           let scanner = scanner |> advance(by: 1, new_src: rest)
           do_scan(scanner, [newline, comment, ..acc])
+        }
+      }
+    }
+
+    // Inline comments (/* a comment */)
+    "/*" <> rest -> {
+      case string.split_once(rest, "*/") {
+
+        // The inline comment is never closed, going to make this an error
+        Error(Nil) -> Error(Nil)
+
+        Ok(#(comment, rest)) -> {
+          let comment = token(scanner, InlineComment, comment)
+          do_scan(scanner |> advance(by: string.length(comment.lexeme) + 4, new_src: rest), [comment, ..acc])
         }
       }
     }

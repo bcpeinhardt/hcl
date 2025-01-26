@@ -1,0 +1,14 @@
+---
+version: 1.2.5
+title: Scanner: line comment with double slash
+---
+Ok([
+  HclToken(
+    LineComment,
+    " I am a comment",
+    0,
+  ),
+  HclToken(Newline, "
+", 17),
+  HclToken(Identifier, "Foo", 18),
+])
