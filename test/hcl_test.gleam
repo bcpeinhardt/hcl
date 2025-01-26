@@ -1,6 +1,6 @@
-import hcl
-import gleeunit
 import birdie
+import gleeunit
+import hcl
 import pprint
 
 pub fn main() {
@@ -29,4 +29,12 @@ pub fn boolean_test() {
 
 pub fn other_punctuation_test() {
   test_scan("other_punctuation", ": ? => . , ... ${ %{")
+}
+
+pub fn ident_test() {
+  test_scan("identifier", "hello_baby-c4kes")
+}
+
+pub fn byte_offset_of_ident_test() {
+  test_scan("byte offset of identifier", "Foo + Bar")
 }

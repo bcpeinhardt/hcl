@@ -1,0 +1,11 @@
+---
+version: 1.2.5
+title: Scanner: identifier
+---
+Ok([
+  HclToken(
+    Identifier,
+    "hello_baby-c4kes",
+    0,
+  ),
+])

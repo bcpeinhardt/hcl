@@ -1,0 +1,9 @@
+---
+version: 1.2.5
+title: Scanner: byte offset of identifier
+---
+Ok([
+  HclToken(Identifier, "Foo", 0),
+  HclToken(OperatorOrDelimeter, "+", 4),
+  HclToken(Identifier, "Bar", 6),
+])
